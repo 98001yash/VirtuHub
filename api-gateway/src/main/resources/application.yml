@@ -28,6 +28,13 @@ spring:
 
 
 
+          - id: EventManagementService
+            uri: http://localhost:9020
+            predicates:
+             - Path=/event/**
+
+
+
 
 
 
