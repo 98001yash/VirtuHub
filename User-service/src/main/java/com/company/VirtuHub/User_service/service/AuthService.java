@@ -92,6 +92,4 @@ public class AuthService {
                 user.getRole());
     }
 
-
-
 }
