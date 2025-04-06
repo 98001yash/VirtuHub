@@ -5,6 +5,7 @@ import com.company.VirtuHub.EventManagementService.dtos.TicketDto;
 import com.company.VirtuHub.EventManagementService.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,13 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<TicketDto> createTicket(@PathVariable Long eventId, @RequestBody TicketDto ticketDTO) {
-        log.info("Received request to create ticket for event id: {}", eventId);
-        TicketDto createdTicket = ticketService.createTicket(eventId, ticketDTO);
-        return ResponseEntity.ok(createdTicket);
+    public ResponseEntity<TicketDto> bookTicket(@PathVariable Long eventId, @RequestBody TicketDto ticketDto) {
+        // TODO: Add validation if needed before booking
+
+        TicketDto booked = ticketService.bookTicket(eventId, ticketDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(booked);
     }
+
 
     @GetMapping
     public ResponseEntity<List<TicketDto>> getTicketsByEventId(@PathVariable Long eventId) {

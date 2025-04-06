@@ -23,16 +23,24 @@ public class TicketService {
     private final VirtualEventRepository virtualEventRepository;
     private final ModelMapper modelMapper;
 
-    public TicketDto createTicket(Long eventId, TicketDto ticketDto){
-        log.info("Creating ticket for event id: {}",eventId);
+    public TicketDto bookTicket(Long eventId, TicketDto ticketDto){
+        log.info("Creating ticket for event id: {}", eventId);
         VirtualEvent event = virtualEventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id: " + eventId));
+
+        // TODO: Implement payment integration here
+        // For example: Call PaymentService and verify payment before booking the ticket.
 
         Ticket ticket = modelMapper.map(ticketDto, Ticket.class);
         ticket.setVirtualEvent(event);
         Ticket savedTicket = ticketRepository.save(ticket);
+
+        // TODO: Send booking confirmation notification to the user (Email/WhatsApp/etc.)
+        // For example: Call NotificationService with booking details.
+
         return modelMapper.map(savedTicket, TicketDto.class);
     }
+
 
     public List<TicketDto> getTicketByEventId(Long eventId){
         log.info("Fetching ticket for event id: {}",eventId);

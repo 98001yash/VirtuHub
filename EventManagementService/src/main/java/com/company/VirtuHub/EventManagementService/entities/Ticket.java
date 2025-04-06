@@ -32,5 +32,7 @@ public class Ticket {
 
     @Column(nullable = false)
     private String ticketType; // e.g., General Admission, VIP
+
+    private Long userId;
 }
 

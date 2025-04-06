@@ -9,4 +9,6 @@ public class TicketDto {
     private String attendeeEmail;
     private Long eventId;
     private String ticketType;
+
+    private Long userId;
 }

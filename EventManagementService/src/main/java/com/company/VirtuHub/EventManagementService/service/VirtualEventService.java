@@ -27,6 +27,10 @@ public class VirtualEventService {
     public VirtualEventDto createEvent(VirtualEventDto eventDto) {
         log.info("Creating a new Virtual event: {}", eventDto.getEventName());
 
+        if (eventDto.getHostUserId() == null) {
+            throw new IllegalArgumentException("Host User ID is required to create an event.");
+        }
+
         // Validate user is a ADMIN
         UserDto userDto = userClient.getUserById(eventDto.getHostUserId());
         if (!"ADMIN".equalsIgnoreCase(String.valueOf(userDto.getRole()))) {
@@ -37,6 +41,7 @@ public class VirtualEventService {
         VirtualEvent savedEvent = virtualEventRepository.save(event);
         return modelMapper.map(savedEvent, VirtualEventDto.class);
     }
+
 
     public List<VirtualEventDto> getAllEvents() {
         log.info("Fetching all virtual events");
