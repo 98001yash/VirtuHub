@@ -1,11 +1,13 @@
 package com.company.VirtuHub.EventManagementService.advices;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class ApiResponse<T> {
 
     private LocalDateTime timeStamp;

@@ -1,12 +1,15 @@
 package com.company.VirtuHub.EventManagementService.controller;
 
+import com.company.VirtuHub.EventManagementService.advices.ApiResponse;
 import com.company.VirtuHub.EventManagementService.dtos.VirtualEventDto;
 import com.company.VirtuHub.EventManagementService.service.VirtualEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -53,5 +56,16 @@ public class VirtualEventController {
         return ResponseEntity.noContent().build();
     }
 
-
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<VirtualEventDto>>> searchEvents(
+            @RequestParam(required = false) String eventName,
+            @RequestParam(required = false) String platform,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventDateTime
+    ) {
+        List<VirtualEventDto> results = virtualEventService.searchEvents(eventName, platform, eventDateTime);
+        return ResponseEntity.ok(ApiResponse.<List<VirtualEventDto>>builder()
+                .timeStamp(LocalDateTime.now())
+                .data(results)
+                .build());
+    }
 }

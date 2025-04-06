@@ -21,19 +21,9 @@ public class VirtualEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String eventName;
-
-    @Column(nullable = false)
     private LocalDateTime eventDateTime;
-
-    @Column(nullable = false)
     private String platform;
-
-    @Column(nullable = false)
     private String accessLink;
-
-    @Column
     private String eventDescription;
 }

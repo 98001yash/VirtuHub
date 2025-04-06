@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,14 +46,21 @@ public class VirtualEventService {
         return modelMapper.map(event, VirtualEventDto.class);
     }
 
-    public VirtualEventDto updateEvent(Long id, VirtualEventDto eventDetails){
-        log.info("Updating virtual event with id: {}",id);
+    public VirtualEventDto updateEvent(Long id, VirtualEventDto eventDetails) {
+        log.info("Updating virtual event with id: {}", id);
         VirtualEvent existingEvent = virtualEventRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Event not found with id: "+id));
-        modelMapper.map(eventDetails, existingEvent);
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id: " + id));
+
+        existingEvent.setEventName(eventDetails.getEventName());
+        existingEvent.setEventDateTime(eventDetails.getEventDateTime());
+        existingEvent.setPlatform(eventDetails.getPlatform());
+        existingEvent.setAccessLink(eventDetails.getAccessLink());
+        existingEvent.setEventDescription(eventDetails.getEventDescription());
+
         VirtualEvent updatedEvent = virtualEventRepository.save(existingEvent);
         return modelMapper.map(updatedEvent, VirtualEventDto.class);
     }
+
 
 
     public void deleteEvent(Long id){
@@ -61,4 +69,12 @@ public class VirtualEventService {
                 .orElseThrow(()->new ResourceNotFoundException("Event not found with id: "+id));
         virtualEventRepository.delete(event);
     }
+
+    public List<VirtualEventDto> searchEvents(String eventName, String platform, LocalDateTime eventDateTime) {
+        List<VirtualEvent> events = virtualEventRepository.searchEvents(eventName, platform, eventDateTime);
+        return events.stream()
+                .map(event -> modelMapper.map(event, VirtualEventDto.class))
+                .collect(Collectors.toList());
+    }
+
 }
