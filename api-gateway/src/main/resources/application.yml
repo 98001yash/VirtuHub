@@ -30,6 +30,12 @@ spring:
           predicates:
             - Path=/events/**
 
+        - id: Streaming-service
+          uri: lb://Streaming-service
+          predicates:
+            - Path=/stream/**
+
+
 
 
 
