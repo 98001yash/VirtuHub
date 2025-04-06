@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 public interface VirtualEventRepository extends JpaRepository<VirtualEvent,Long> {
@@ -21,4 +22,8 @@ public interface VirtualEventRepository extends JpaRepository<VirtualEvent,Long>
             "(:platform IS NULL OR LOWER(ve.platform) LIKE LOWER(CONCAT('%', :platform, '%'))) AND " +
             "(:eventDateTime IS NULL OR ve.eventDateTime = :eventDateTime)")
     List<VirtualEvent> searchEvents(String eventName, String platform, LocalDateTime eventDateTime);
+
+
+
+    List<VirtualEvent> findByHostUserId(Long hostUserId);
 }

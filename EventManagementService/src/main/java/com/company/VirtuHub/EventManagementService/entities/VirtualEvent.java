@@ -26,4 +26,8 @@ public class VirtualEvent {
     private String platform;
     private String accessLink;
     private String eventDescription;
+
+
+    @Column(nullable = false)
+    private Long hostUserId;
 }

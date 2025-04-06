@@ -13,5 +13,8 @@ public class VirtualEventDto {
     private String platform;
     private String accessLink;
     private String eventDescription;
+
+    private Long hostUserId;
+
 }
 
