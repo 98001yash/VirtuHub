@@ -1,36 +1,39 @@
 package com.company.VirtuHub.EventManagementService.entities;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tickets")
+@Table(name = "virtual_events")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Ticket {
+public class VirtualEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String attendeeName;
+    private String eventName;
 
     @Column(nullable = false)
-    private String attendeeEmail;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", nullable = false)
-    private VirtualEvent virtualEvent;
+    private LocalDateTime eventDateTime;
 
     @Column(nullable = false)
-    private String ticketType; // e.g., General Admission, VIP
+    private String platform;
+
+    @Column(nullable = false)
+    private String accessLink;
+
+    @Column
+    private String eventDescription;
 }
-
