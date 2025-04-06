@@ -1,10 +1,8 @@
 package com.company.VirtuHub.User_service.exceptions;
 
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException() {
-    }
+public class ResourceNotFoundException extends RuntimeException{
 
-    public ResourceNotFoundException(String message) {
+    public ResourceNotFoundException(String message){
         super(message);
     }
 }
