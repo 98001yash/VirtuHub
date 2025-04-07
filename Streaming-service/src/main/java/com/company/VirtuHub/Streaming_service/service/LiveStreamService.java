@@ -52,6 +52,8 @@ public class LiveStreamService {
 
         LiveStreamSession updated = streamRepository.save(session);
         log.info("Started stream session with ID {}", streamId);
+
+        //  TODO: Notify users that the live session has started (via Notification Service)
         return convertToResponseDto(updated);
     }
 
