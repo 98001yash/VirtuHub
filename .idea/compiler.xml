@@ -19,7 +19,7 @@
         <module name="User-service" />
         <module name="api-gateway" />
       </profile>
-      <profile name="Annotation profile for Streaming-service" enabled="true">
+      <profile name="Annotation profile for Content-Management-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -27,12 +27,14 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
         </processorPath>
+        <module name="Content-Management-service" />
         <module name="Streaming-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Content-Management-service" options="-parameters -parameters" />
       <module name="EventManagementService" options="-parameters -parameters" />
       <module name="Streaming-service" options="-parameters -parameters" />
       <module name="User-service" options="-parameters -parameters" />

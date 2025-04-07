@@ -35,6 +35,11 @@ spring:
           predicates:
             - Path=/streams/**
 
+        - id: Content-Management-service
+          uri: lb://Content-Management-service
+          predicates:
+            - Path=/content/**
+
 
 
 
