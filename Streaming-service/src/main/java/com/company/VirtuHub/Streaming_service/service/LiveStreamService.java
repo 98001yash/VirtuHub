@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,45 +24,71 @@ public class LiveStreamService {
 
     private final LiveStreamSessionRepository streamRepository;
     private final ModelMapper modelMapper;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 
-    public LiveStreamSessionResponseDto createSession(LiveStreamSessionRequestDto requestDto) {
-        log.info("Creating streaming session for event: {}", requestDto.getEventId());
+    public LiveStreamSessionResponseDto createStream(LiveStreamSessionRequestDto requestDto) {
+        LiveStreamSession session = LiveStreamSession.builder()
+                .eventId(requestDto.getEventId())
+                .streamUrl(requestDto.getStreamUrl())
+                .embedCode(requestDto.getEmbedCode())
+                .isRecordingEnabled(requestDto.getIsRecordingEnabled())
+                .status(StreamStatus.SCHEDULED)
+                .scheduledStartTime(LocalDateTime.parse(requestDto.getScheduledStartTime(), formatter))
+                .build();
 
-        LiveStreamSession session = modelMapper.map(requestDto, LiveStreamSession.class);
-        session.setStatus(StreamStatus.valueOf("SCHEDULED"));
         LiveStreamSession saved = streamRepository.save(session);
-
-        return modelMapper.map(saved, LiveStreamSessionResponseDto.class);
+        log.info("Created new stream session for event ID {}", saved.getEventId());
+        return convertToResponseDto(saved);
     }
 
-    public LiveStreamSessionResponseDto getSessionById(Long id) {
-        log.info("Fetching session with ID: {}", id);
-        LiveStreamSession session = streamRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Session not found with id: " + id));
 
-        return modelMapper.map(session, LiveStreamSessionResponseDto.class);
+    public LiveStreamSessionResponseDto startStream(Long streamId) {
+        LiveStreamSession session = streamRepository.findById(streamId)
+                .orElseThrow(() -> new ResourceNotFoundException("Stream session not found with ID: " + streamId));
+
+        session.setStatus(StreamStatus.LIVE);
+        session.setActualStartTime(LocalDateTime.now());
+
+        LiveStreamSession updated = streamRepository.save(session);
+        log.info("Started stream session with ID {}", streamId);
+        return convertToResponseDto(updated);
     }
 
-    public List<LiveStreamSessionResponseDto> getAllSessions(){
-        log.info("Fetching all streaming sessions");
-        return streamRepository.findAll().stream()
-                .map(session->modelMapper.map(session, LiveStreamSessionResponseDto.class))
+    public LiveStreamSessionResponseDto endStream(Long streamId) {
+        LiveStreamSession session = streamRepository.findById(streamId)
+                .orElseThrow(() -> new ResourceNotFoundException("Stream session not found with ID: " + streamId));
+
+        session.setStatus(StreamStatus.ENDED);
+        session.setEndTime(LocalDateTime.now());
+        if (session.getIsRecordingEnabled() != null && session.getIsRecordingEnabled()) {
+            session.setRecordingUrl("https://recordings.virtuhub.com/" + session.getId());
+        }
+
+        LiveStreamSession updated = streamRepository.save(session);
+        log.info("Ended stream session with ID {}", streamId);
+        return convertToResponseDto(updated);
+    }
+
+
+    public List<LiveStreamSessionResponseDto> getAllStreamsByEvent(Long eventId) {
+        List<LiveStreamSession> sessions = streamRepository.findByEventId(eventId);
+        log.info("Fetched {} stream sessions for event ID {}", sessions.size(), eventId);
+        return sessions.stream()
+                .map(this::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
-    public LiveStreamSessionResponseDto updateSession(Long id, LiveStreamSessionRequestDto requestDto) {
-        log.info("Updating session with ID: {}", id);
-        LiveStreamSession session = streamRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Session not found with id: " + id));
-
-        session.setStreamUrl(requestDto.getStreamUrl());
-        session.setEmbedCode(requestDto.getEmbedCode());
-        session.setIsRecordingEnabled(requestDto.getIsRecordingEnabled());
-        session.setScheduledStartTime(LocalDateTime.parse(requestDto.getScheduledStartTime()));
-
-        LiveStreamSession updated = streamRepository.save(session);
-        return modelMapper.map(updated, LiveStreamSessionResponseDto.class);
+    private LiveStreamSessionResponseDto convertToResponseDto(LiveStreamSession session) {
+        return LiveStreamSessionResponseDto.builder()
+                .id(session.getId())
+                .eventId(session.getEventId())
+                .streamUrl(session.getStreamUrl())
+                .embedCode(session.getEmbedCode())
+                .status(session.getStatus().toString())
+                .isRecordingEnabled(session.getIsRecordingEnabled())
+                .recordedVideoUrl(session.getRecordingUrl())
+                .scheduledStartTime(session.getScheduledStartTime() != null ? session.getScheduledStartTime().toString() : null)
+                .build();
     }
-
 }

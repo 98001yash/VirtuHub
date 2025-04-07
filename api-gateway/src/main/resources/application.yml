@@ -33,7 +33,7 @@ spring:
         - id: Streaming-service
           uri: lb://Streaming-service
           predicates:
-            - Path=/stream/**
+            - Path=/streams/**
 
 
 
