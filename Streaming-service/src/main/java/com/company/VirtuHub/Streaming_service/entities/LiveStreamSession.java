@@ -24,12 +24,19 @@ public class LiveStreamSession {
     private Long eventId;
 
     private String streamUrl;
+
+    private String embedCode;
+
+    private Boolean isRecordingEnabled;
+
     private String recordingUrl;
 
     @Enumerated(EnumType.STRING)
     private StreamStatus status;
 
-    private LocalDateTime startDate;
+    private LocalDateTime scheduledStartTime;
+
+    private LocalDateTime actualStartTime;
 
     private LocalDateTime endTime;
 }
