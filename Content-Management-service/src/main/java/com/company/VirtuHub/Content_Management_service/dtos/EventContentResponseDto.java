@@ -18,4 +18,8 @@ public class EventContentResponseDto {
     private String contentUrl;
     private String contentType;
     private String uploadedAt;
+
+    private String status;
+    private String rejectionReason;
+
 }

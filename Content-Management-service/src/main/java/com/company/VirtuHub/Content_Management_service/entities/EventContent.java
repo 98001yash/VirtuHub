@@ -1,6 +1,7 @@
 package com.company.VirtuHub.Content_Management_service.entities;
 
 
+import com.company.VirtuHub.Content_Management_service.enums.ContentStatus;
 import com.company.VirtuHub.Content_Management_service.enums.ContentType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,4 +32,9 @@ public class EventContent {
     private ContentType contentType;
 
     private LocalDateTime uploadedAt;
+
+    @Enumerated(EnumType.STRING)
+    private ContentStatus status; //  PENDING, APPROVED, REJECTED
+
+    private String rejectionReason;
 }
