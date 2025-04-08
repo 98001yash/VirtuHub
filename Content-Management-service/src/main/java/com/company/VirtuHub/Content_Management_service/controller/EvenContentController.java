@@ -1,15 +1,20 @@
 package com.company.VirtuHub.Content_Management_service.controller;
 
 
+import com.company.VirtuHub.Content_Management_service.advices.ApiResponse;
+import com.company.VirtuHub.Content_Management_service.dtos.ContentApprovalRequestDto;
 import com.company.VirtuHub.Content_Management_service.dtos.EventContentRequestDto;
 import com.company.VirtuHub.Content_Management_service.dtos.EventContentResponseDto;
 import com.company.VirtuHub.Content_Management_service.service.EventContentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/content")

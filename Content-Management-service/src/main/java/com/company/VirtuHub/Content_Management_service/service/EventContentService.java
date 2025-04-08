@@ -1,9 +1,11 @@
 package com.company.VirtuHub.Content_Management_service.service;
 
 
+import com.company.VirtuHub.Content_Management_service.dtos.ContentApprovalRequestDto;
 import com.company.VirtuHub.Content_Management_service.dtos.EventContentRequestDto;
 import com.company.VirtuHub.Content_Management_service.dtos.EventContentResponseDto;
 import com.company.VirtuHub.Content_Management_service.entities.EventContent;
+import com.company.VirtuHub.Content_Management_service.enums.ContentStatus;
 import com.company.VirtuHub.Content_Management_service.enums.ContentType;
 import com.company.VirtuHub.Content_Management_service.exceptions.ResourceNotFoundException;
 import com.company.VirtuHub.Content_Management_service.repository.EventContentRepository;
@@ -63,4 +65,21 @@ public class EventContentService {
 
         return modelMapper.map(content, EventContentResponseDto.class);
     }
+
+    public EventContentResponseDto approveOrRejectContent(ContentApprovalRequestDto approvalDto) {
+        EventContent content = repository.findById(approvalDto.getContentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Content not found"));
+
+        if (approvalDto.isApproved()) {
+            content.setStatus(ContentStatus.APPROVED);
+            content.setRejectionReason(null);
+        } else {
+            content.setStatus(ContentStatus.REJECTED);
+            content.setRejectionReason(approvalDto.getRejectionReason());
+        }
+
+        EventContent updated = repository.save(content);
+        return modelMapper.map(updated, EventContentResponseDto.class);
+    }
+
 }
