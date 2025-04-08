@@ -4,6 +4,7 @@ package com.company.VirtuHub.Content_Management_service.service;
 import com.company.VirtuHub.Content_Management_service.dtos.EventContentRequestDto;
 import com.company.VirtuHub.Content_Management_service.dtos.EventContentResponseDto;
 import com.company.VirtuHub.Content_Management_service.entities.EventContent;
+import com.company.VirtuHub.Content_Management_service.enums.ContentType;
 import com.company.VirtuHub.Content_Management_service.exceptions.ResourceNotFoundException;
 import com.company.VirtuHub.Content_Management_service.repository.EventContentRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,26 @@ public class EventContentService {
     private final EventContentRepository repository;
     private final ModelMapper modelMapper;
 
-    public EventContentResponseDto uploadContent(EventContentRequestDto requestDto){
-        log.info("Uploading new content for event ID: {}",requestDto.getEventId());
+    public EventContentResponseDto uploadContent(EventContentRequestDto requestDto) {
+        log.info("Uploading content for eventId: {}", requestDto.getEventId());
 
+        // Map request DTO to Entity without ID
         EventContent content = modelMapper.map(requestDto, EventContent.class);
-        content.setUploadedAt(LocalDateTime.now());
 
-        EventContent saved = repository.save(content);
-        return modelMapper.map(saved, EventContentResponseDto.class);
+        // Ensure ID is null to avoid update conflict
+        content.setId(null); // 👈 this guarantees a new row
+
+        // Set default values
+        content.setUploadedAt(LocalDateTime.now());
+        content.setContentType(ContentType.valueOf(requestDto.getContentType()));
+
+        // Save to DB
+        EventContent savedContent = repository.save(content);
+
+        // Convert to response DTO
+        return modelMapper.map(savedContent, EventContentResponseDto.class);
     }
+
 
     public List<EventContentResponseDto> getContentByEventId(Long eventId){
         log.info("Fetching content for event ID: {}",eventId);
