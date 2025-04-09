@@ -41,6 +41,12 @@ spring:
             - Path=/content/**
 
 
+        - id: Payment-service
+          uri: lb://Payment-service
+          predicates:
+            - Path=/payments/**
+
+
 
 
 

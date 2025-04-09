@@ -19,7 +19,7 @@
         <module name="User-service" />
         <module name="api-gateway" />
       </profile>
-      <profile name="Annotation profile for Content-Management-service" enabled="true">
+      <profile name="Annotation profile for Payment-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -29,6 +29,7 @@
         </processorPath>
         <module name="Content-Management-service" />
         <module name="Streaming-service" />
+        <module name="Payment-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -36,6 +37,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Content-Management-service" options="-parameters -parameters" />
       <module name="EventManagementService" options="-parameters -parameters" />
+      <module name="Payment-service" options="-parameters -parameters" />
       <module name="Streaming-service" options="-parameters -parameters" />
       <module name="User-service" options="-parameters -parameters" />
       <module name="api-gateway" options="-parameters" />
