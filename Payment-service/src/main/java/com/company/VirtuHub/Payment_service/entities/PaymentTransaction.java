@@ -1,6 +1,7 @@
 package com.company.VirtuHub.Payment_service.entities;
 
 
+import com.company.VirtuHub.Payment_service.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
