@@ -33,7 +33,7 @@ public class EventContentService {
         EventContent content = modelMapper.map(requestDto, EventContent.class);
 
         // Ensure ID is null to avoid update conflict
-        content.setId(null); // 👈 this guarantees a new row
+        content.setId(null);
 
         // Set default values
         content.setUploadedAt(LocalDateTime.now());

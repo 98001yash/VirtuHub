@@ -72,5 +72,4 @@ public class TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with id: " + id));
         ticketRepository.delete(ticket);
     }
-
 }
