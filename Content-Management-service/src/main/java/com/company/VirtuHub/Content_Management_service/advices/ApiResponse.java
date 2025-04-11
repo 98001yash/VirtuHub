@@ -1,13 +1,16 @@
 package com.company.VirtuHub.Content_Management_service.advices;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class ApiResponse<T> {
 
 

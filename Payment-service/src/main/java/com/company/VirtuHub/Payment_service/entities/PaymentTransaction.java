@@ -21,6 +21,7 @@ public class PaymentTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long eventId;
+    private Long paymentId;
 
     private Long userId;
 
